@@ -25,14 +25,14 @@ class LoisirDetailScreen extends StatelessWidget {
               children: <Widget>[
                 Center(
                   child: Image.network(
-                    loisir['image'] ?? '',
+                    loisir['image'] ?? 'https://via.placeholder.com/150',
                     height: 200,
                     fit: BoxFit.cover,
                   ),
                 ),
                 SizedBox(height: 16),
                 Text(
-                  loisir['titre'] ?? 'Titre non disponible',
+                  loisir['title'] ?? 'Titre non disponible',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
@@ -47,7 +47,7 @@ class LoisirDetailScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Notation: ${loisir['note']?.toString() ?? 'Non noté'}',
+                  'Notation: ${loisir['rating']?.toString() ?? 'Non noté'}',
                   style: TextStyle(fontSize: 16),
                 ),
                 SizedBox(height: 8),
