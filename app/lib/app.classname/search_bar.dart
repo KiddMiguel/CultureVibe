@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:app/app.API/API_loisir.dart'; // Assurez-vous d'importer votre fichier API
 
 const Duration fakeAPIDuration = Duration(seconds: 0);
 
@@ -59,8 +60,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           suggestionsBuilder:
               (BuildContext context, SearchController controller) async {
             _searchingWithQuery = controller.text;
-            final List<String> options =
-                (await _FakeAPI.search(_searchingWithQuery!)).toList();
+            final List<dynamic> allLoisirs = await LoisirApi.getAllLoisirs();
+            final List<String> options = allLoisirs
+                .map((loisir) => loisir['name'].toString())
+                .where(
+                    (name) => name.contains(_searchingWithQuery!.toLowerCase()))
+                .toList();
 
             if (_searchingWithQuery != controller.text) {
               return _lastOptions;
@@ -83,25 +88,5 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         ),
       ),
     );
-  }
-}
-
-// Mimics a remote API.
-class _FakeAPI {
-  static const List<String> _kOptions = <String>[
-    'livres',
-    'film',
-    'chameleon',
-  ];
-
-  // Searches the options, but injects a fake "network" delay.
-  static Future<Iterable<String>> search(String query) async {
-    await Future<void>.delayed(fakeAPIDuration); // Fake 1 second delay.
-    if (query.isEmpty) {
-      return const Iterable<String>.empty();
-    }
-    return _kOptions.where((String option) {
-      return option.contains(query.toLowerCase());
-    });
   }
 }
