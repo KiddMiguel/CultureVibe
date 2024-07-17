@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
           title: 'Culture Vibe',
           imagePath: 'images/logo.png',
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color(0xFF2F70AF),
       ),
       bottomNavigationBar: FooterWidget(),
       body: <Widget>[

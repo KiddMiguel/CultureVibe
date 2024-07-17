@@ -12,30 +12,40 @@ class _FooterWidgetState extends State<FooterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationBar(
-      onDestinationSelected: (int index) {
-        setState(() {
-          currentPageIndex = index;
-        });
-      },
-      indicatorColor: Colors.amber,
-      selectedIndex: currentPageIndex,
-      destinations: const <Widget>[
-        NavigationDestination(
-          selectedIcon: Icon(Icons.home),
-          icon: Icon(Icons.home_outlined),
-          label: 'Home',
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        NavigationBar(
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          indicatorColor: const Color(0xFF806491),
+          selectedIndex: currentPageIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              selectedIcon: Icon(Icons.home, color: Color(0xFF806491)),
+              icon: Icon(Icons.home_outlined, color: Color(0xFF806491)),
+              label: 'Accueil',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.book,
+                  color: Colors.white), // Appropriate icon for loisirs
+              icon: Icon(Icons.book_outlined, color: Colors.white),
+              label: 'Loisirs',
+            ),
+          ],
         ),
-        NavigationDestination(
-          icon: Badge(child: Icon(Icons.notifications_sharp)),
-          label: 'Notifications',
-        ),
-        NavigationDestination(
-          icon: Badge(
-            label: Text('2'),
-            child: Icon(Icons.messenger_sharp),
+        Positioned(
+          top: 5,
+          child: FloatingActionButton(
+            onPressed: () {
+              // Add your onPressed code here!
+            },
+            child: const Icon(Icons.add, color: Colors.white),
+            backgroundColor: const Color(0xFF806491),
           ),
-          label: 'Messages',
         ),
       ],
     );
