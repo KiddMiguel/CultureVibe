@@ -12,7 +12,6 @@ class _FooterWidgetState extends State<FooterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     return NavigationBar(
       onDestinationSelected: (int index) {
         setState(() {
