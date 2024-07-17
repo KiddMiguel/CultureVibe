@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:app/app.classname/header.dart';
+import 'package:app/app.classname/footer.dart';
 
 class LoisirDetailScreen extends StatelessWidget {
   final Map<String, dynamic> loisir;
@@ -10,8 +12,13 @@ class LoisirDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(loisir['titre'] ?? 'Titre non disponible'),
+        title: HeaderWidget(
+          title: 'Culture Vibe',
+          imagePath: 'images/logo.png',
+        ),
+        backgroundColor: const Color(0xFF2F70AF),
       ),
+      bottomNavigationBar: FooterWidget(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Card(
@@ -28,7 +35,8 @@ class LoisirDetailScreen extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                      loisir['image'] ?? 'https://via.placeholder.com/150',
+                      loisir['image'] ??
+                          'https://th.bing.com/th/id/OIP.E2sjvXHdm-8mAZ0Zz6qOpAHaE8?rs=1&pid=ImgDetMain',
                       height: 200,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -50,7 +58,7 @@ class LoisirDetailScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Catégorie: ${loisir['categorie'] ?? 'Non disponible'}',
+                  'Catégorie: ${loisir['category  '] ?? 'Non disponible'}',
                   style: TextStyle(
                       fontSize: 16,
                       fontStyle: FontStyle.italic,
@@ -63,7 +71,7 @@ class LoisirDetailScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Date: ${loisir['date'] ?? 'Date non disponible'}',
+                  'Date: ${loisir['date_publication'] ?? 'Date non disponible'}',
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 SizedBox(height: 16),
