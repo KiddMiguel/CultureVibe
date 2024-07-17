@@ -81,4 +81,18 @@ class LoisirApi {
       return Future.error("Error: ${e.toString()}");
     }
   }
+
+  // Récupérer les categories
+  static Future<List<dynamic>> getAllCategories() async {
+    try {
+      var response = await http.get(Uri.parse(baseUrl + "category"));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return Future.error("Server error");
+      }
+    } catch (e) {
+      return Future.error("Error: ${e.toString()}");
+    }
+  }
 }
