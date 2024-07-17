@@ -29,19 +29,43 @@ class _HomePageState extends State<HomePage> {
         /// Home page
         Column(
           children: [
-            SearchBarWidget(), // Add the SearchBar widget here
+            // La barre de recherche en haut
+            const SearchBarWidget(),
+
+            // Contenu de la page d'accueil
             Expanded(
-              child: Card(
-                shadowColor: Colors.transparent,
-                margin: const EdgeInsets.all(8.0),
-                child: SizedBox.expand(
-                  child: Center(
-                    child: Text(
-                      'Home page',
-                      style: theme.textTheme.titleLarge,
+              child: Column(
+                children: [
+                  // `rect1` occupe 1/3 de l'espace vertical
+                  Container(
+                    color: Colors.grey[300], // Couleur de fond de rect1
+                    height: MediaQuery.of(context).size.height /
+                        3, // Hauteur de 1/3 de l'espace disponible
+                    child: Center(
+                      child: Text(
+                        'rect1',
+                      ),
                     ),
                   ),
-                ),
+
+                  // `rect2` occupe 2/3 de l'espace vertical
+                  Expanded(
+                    child: Container(
+                      color: Colors.grey[200], // Couleur de fond de rect2
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'rect2',
+                            ),
+                            // Ajoutez d'autres widgets ici si nécessaire
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
