@@ -1,3 +1,5 @@
+import 'package:app/app.API/API_loisir.dart';
+import 'package:app/components/create_loisir_form.dart';
 import 'package:flutter/material.dart';
 
 class FooterWidget extends StatefulWidget {
@@ -41,7 +43,11 @@ class _FooterWidgetState extends State<FooterWidget> {
           top: 5,
           child: FloatingActionButton(
             onPressed: () {
-              // Add your onPressed code here!
+              // appel de la page de création de loisir
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateLoisirForm()),
+              );
             },
             child: const Icon(Icons.add, color: Colors.white),
             backgroundColor: const Color(0xFF806491),
