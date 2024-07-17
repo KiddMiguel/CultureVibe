@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 
 class LoisirApi {
-  static const String baseUrl = "http://127.0.0.1:8000/";
+  static const String baseUrl = "http://10.0.2.2:8000/";
 
   // Recupérer tous les loisirs
   static Future<List<dynamic>> getAllLoisirs() async {
     try {
       var response = await http.get(Uri.parse(baseUrl + "loisirs"));
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         if (response.body.isNotEmpty) {
           return jsonDecode(response.body) as List<dynamic>;
         } else {
@@ -72,6 +72,20 @@ class LoisirApi {
     try {
       var response =
           await http.get(Uri.parse(baseUrl + "topLoisirByCategory/$categorie"));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return Future.error("Server error");
+      }
+    } catch (e) {
+      return Future.error("Error: ${e.toString()}");
+    }
+  }
+
+  // Récupérer les categories
+  static Future<List<dynamic>> getAllCategories() async {
+    try {
+      var response = await http.get(Uri.parse(baseUrl + "category"));
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

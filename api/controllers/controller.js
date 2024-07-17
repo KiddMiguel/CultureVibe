@@ -21,9 +21,8 @@ exports.getLoisirById = async (req, res) => {
 
 exports.createLoisir = async (req, res) => {
     try{
-        const currentDate = new Date().toISOString().split('T')[0];
-        const loisir = await pool.query('INSERT INTO loisir (titre, description, date_publication, image, category_id) VALUES (?, ?, ?, ?, ?) RETURNING *', [req.body.titre, req.body.description, currentDate, req.body.image, req.body.category_id]);
-        res.status(201).json(loisir);
+        const loisir = await pool.query('INSERT INTO loisir (titre, description, date_publication, image, category_id) VALUES (?, ?, ?, ?, ?)', [req.body.titre, req.body.description, req.body.date_publication, req.body.image, req.body.category_id]);
+        res.status(201).json({message: 'Loisir créé'});
     }catch(err){
         res.status(400).json({message: err.message});
     }
@@ -33,8 +32,8 @@ exports.createLoisir = async (req, res) => {
 exports.createNotation = async (req, res) => {
     try{
         const currentDate = new Date().toISOString().split('T')[0];
-        const loisir = await pool.query('INSERT INTO notation (note, loisir_id, date_notation) VALUES (?, ?, ?) RETURNING *', [req.body.note, req.body.loisir_id, currentDate]);
-        res.status(201).json(loisir.rows);
+        const loisir = await pool.query('INSERT INTO notation (note, loisir_id, date_notation) VALUES (?, ?, ?)', [req.body.note, req.body.loisir_id, date_publication]);
+        res.status(201).json({message: 'Notation créée'});
     }catch(err){
         res.status(400).json({message: err.message});
     }
@@ -71,7 +70,7 @@ exports.getCategoryById = async (req, res) => {
 
 exports.createCategory = async (req, res) => {
     try{
-        const loisir = await pool.query('INSERT INTO category (nom) VALUES (?) RETURNING *', [req.body.nom]);
+        const loisir = await pool.query('INSERT INTO category (nom) VALUES (?)', [req.body.nom]);
         res.status(201).json(loisir);
     }catch(err){
         res.status(400).json({message: err.message});
