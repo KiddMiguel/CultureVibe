@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:app/screens/home_page.dart';
 
-void main() => runApp(App());
+void main() => runApp(const MyApp());
 
-// Raccourci : Saisisser 'stless' puis appuyer sur Enter
-class App extends StatelessWidget {
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Time Tracker',
-      theme: ThemeData(primaryColor: Colors.indigo),
+      title: 'Time tracker',
+      theme: ThemeData(
+        primaryColor: Colors.red,
+      ),
+      home: HomePage(),
     );
   }
 }
