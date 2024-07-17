@@ -4,7 +4,7 @@ const controller = require('../controllers/controller');
 const statController = require('../controllers/statController');
 
 // Loisir
-router.get('/loisir', controller.getLoisir);
+router.get('/loisirs', controller.getLoisir);
 router.get('/loisir/:id', controller.getLoisirById);
 router.post('/loisir', controller.createLoisir);
 

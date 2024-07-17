@@ -3,7 +3,7 @@ const pool = require('../database/database');
 
 exports.getLoisir = async (req, res) => {
     try{
-        const loisir = await pool.query('SELECT * FROM loisir');
+        const loisir = await pool.query('SELECT l.*, n.note, c.nom AS category_nom FROM loisir l LEFT JOIN notation n ON l.id = n.loisir_id LEFT JOIN category c ON l.category_id = c.id');
         res.status(200).json(loisir);
     }catch(err){
         res.status(400).json({message: err.message});
@@ -12,7 +12,7 @@ exports.getLoisir = async (req, res) => {
 
 exports.getLoisirById = async (req, res) => {
     try{
-        const loisir = await pool.query('SELECT * FROM loisir WHERE id = ?', [req.params.id]);
+        const loisir = await pool.query('SELECT l.*, n.note, c.nom AS category_nom FROM loisir l LEFT JOIN notation n ON l.id = n.loisir_id LEFT JOIN category c ON l.category_id = c.id WHERE l.id = ? LIMIT 1', [req.params.id]);
         res.status(200).json(loisir);
     }catch(err){
         res.status(400).json({message: err.message});
