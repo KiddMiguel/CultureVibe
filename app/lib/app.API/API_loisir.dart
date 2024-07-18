@@ -4,17 +4,14 @@ import 'package:http/http.dart' as http;
 
 class LoisirApi {
   static const String baseUrl = "http://10.0.2.2:8000/";
+  // static const String baseUrl = "http://localhost:8000/";
 
-  // Recupérer tous les loisirs
+  // Rechercher les loisirs
   static Future<List<dynamic>> getAllLoisirs() async {
     try {
       var response = await http.get(Uri.parse(baseUrl + "loisirs"));
-      if (response.statusCode == 201) {
-        if (response.body.isNotEmpty) {
-          return jsonDecode(response.body) as List<dynamic>;
-        } else {
-          return Future.error('Aucun loisir trouvé');
-        }
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
       } else {
         return Future.error("Server error");
       }

@@ -3,7 +3,12 @@ const pool = require('../database/database');
 
 exports.getLoisir = async (req, res) => {
     try{
-        const loisir = await pool.query('SELECT l.*, n.note, c.nom AS category_nom FROM loisir l LEFT JOIN notation n ON l.id = n.loisir_id LEFT JOIN category c ON l.category_id = c.id');
+        const loisir = await pool.query('SELECT l.*, SUM(n.note) AS note,AVG(n.note) AS moyen_note, c.nom AS category_nom FROM loisir l LEFT JOIN notation n ON l.id = n.loisir_id LEFT JOIN category c ON l.category_id = c.id GROUP BY l.id, c.nom');
+        loisir.forEach((loisir) => {
+            loisir.moyen_note = parseFloat(loisir.moyen_note);
+            loisir.note = parseFloat(loisir.note);
+        });
+        console.log(loisir);
         res.status(200).json(loisir);
     }catch(err){
         res.status(400).json({message: err.message});
@@ -12,8 +17,7 @@ exports.getLoisir = async (req, res) => {
 
 exports.getLoisirById = async (req, res) => {
     try{
-        const loisir = await pool.query('SELECT l.*, n.note, c.nom AS category_nom FROM loisir l LEFT JOIN notation n ON l.id = n.loisir_id LEFT JOIN category c ON l.category_id = c.id WHERE l.id = ? LIMIT 1', [req.params.id]);
-        res.status(200).json(loisir);
+        const loisir = await pool.query(` SELECT l.*, AVG(n.note) AS note, c.nom AS category_nom FROM loisir l LEFT JOIN notation n ON l.id = n.loisir_id LEFT JOIN category c ON l.category_id = c.id WHERE l.id = ? GROUP BY l.id, c.nom LIMIT 1 `, [req.params.id]);        res.status(200).json(loisir);
     }catch(err){
         res.status(400).json({message: err.message});
     }

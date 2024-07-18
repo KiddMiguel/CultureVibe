@@ -41,6 +41,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   http: ^1.2.2
   intl: ^0.19.0
+  carousel_slider: ^4.0.0
 
 
 dev_dependencies:
@@ -73,6 +74,7 @@ flutter:
     - images/matrixx.webp
     - images/meninblack.webp
     - images/titanic.webp
+    - images/imageNo.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
