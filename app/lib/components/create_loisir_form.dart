@@ -51,6 +51,8 @@ class _CreateLoisirFormState extends State<CreateLoisirForm> {
         await LoisirApi.createLoisir(newLoisir);
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Loisir créé avec succès')));
+        // Ramener l'utilisateur à la page d'accueil
+        Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Erreur lors de la création du loisir: $e')));
