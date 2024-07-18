@@ -47,13 +47,13 @@ class _FooterWidgetState extends State<FooterWidget> {
           selectedIndex: currentPageIndex,
           destinations: const <Widget>[
             NavigationDestination(
-              selectedIcon: Icon(Icons.home, color: Color(0xFF806491)),
+              selectedIcon: Icon(Icons.home, color: Colors.white),
               icon: Icon(Icons.home_outlined, color: Color(0xFF806491)),
               label: 'Accueil',
             ),
             NavigationDestination(
               selectedIcon: Icon(Icons.book, color: Colors.white),
-              icon: Icon(Icons.book_outlined, color: Colors.white),
+              icon: Icon(Icons.book_outlined, color: Color(0xFF806491)),
               label: 'Loisirs',
             ),
           ],
