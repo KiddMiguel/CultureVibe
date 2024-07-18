@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:app/app.classname/header.dart';
+import 'package:app/app.classname/footer.dart';
 
 class HeroListPage extends StatelessWidget {
   const HeroListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text("Hero ListView")),
+      appBar: AppBar(
+        title: HeaderWidget(
+          title: 'Culture Vibe',
+          imagePath: 'images/logo.png',
+        ),
+        backgroundColor: const Color(0xFF2F70AF),
+      ),
+      bottomNavigationBar: FooterWidget(),
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 500),
