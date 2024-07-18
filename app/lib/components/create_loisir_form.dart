@@ -149,6 +149,10 @@ class _CreateLoisirFormState extends State<CreateLoisirForm> {
               ElevatedButton(
                 onPressed: _submitForm,
                 child: const Text('Créer'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(
+                      0xFF806491), // Add your desired background color here
+                ),
               ),
             ],
           ),
