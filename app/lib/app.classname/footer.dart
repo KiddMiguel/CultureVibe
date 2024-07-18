@@ -1,6 +1,7 @@
 import 'package:app/app.API/API_loisir.dart';
 import 'package:app/components/create_loisir_form.dart';
 import 'package:app/screens/home_page.dart'; // Assurez-vous d'importer la HomePage
+import 'package:app/screens/list_page.dart'; // Assurez-vous d'importer la HeroListPage
 import 'package:flutter/material.dart';
 
 class FooterWidget extends StatefulWidget {
@@ -22,7 +23,10 @@ class _FooterWidgetState extends State<FooterWidget> {
         );
         break;
       case 1:
-        // Ajoutez la navigation vers la page de loisirs si nécessaire
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HeroListPage()),
+        );
         break;
     }
   }
