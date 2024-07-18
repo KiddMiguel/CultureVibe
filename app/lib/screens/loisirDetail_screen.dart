@@ -18,7 +18,8 @@ class LoisirDetailScreen extends StatelessWidget {
         ),
         backgroundColor: const Color(0xFF2F70AF),
       ),
-      bottomNavigationBar: FooterWidget(),
+      bottomNavigationBar: FooterWidget(
+          currentPage: 'Loisirs'), // Passer le nom de la page actuelle
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Card(

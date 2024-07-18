@@ -5,29 +5,56 @@ import 'package:app/screens/list_page.dart'; // Assurez-vous d'importer la ListP
 import 'package:flutter/material.dart';
 
 class FooterWidget extends StatefulWidget {
-  const FooterWidget({Key? key}) : super(key: key);
+  final String currentPage; // Ajouter un paramètre pour la page actuelle
+
+  const FooterWidget({Key? key, required this.currentPage}) : super(key: key);
 
   @override
   _FooterWidgetState createState() => _FooterWidgetState();
 }
 
 class _FooterWidgetState extends State<FooterWidget> {
-  int currentPageIndex = 0;
+  late int currentPageIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    currentPageIndex =
+        _getPageIndex(widget.currentPage); // Initialiser currentPageIndex
+  }
+
+  int _getPageIndex(String page) {
+    switch (page) {
+      case 'Accueil':
+        return 0;
+      case 'Loisirs':
+        return 1;
+      default:
+        return 0;
+    }
+  }
 
   void _navigateToPage(int index) {
-    switch (index) {
-      case 0:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ListPage()), // Correction ici
-        );
-        break;
+    if (currentPageIndex != index) {
+      setState(() {
+        currentPageIndex = index;
+      });
+      switch (index) {
+        case 0:
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+            (Route<dynamic> route) => false,
+          );
+          break;
+        case 1:
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => ListPage()),
+            (Route<dynamic> route) => false,
+          );
+          break;
+      }
     }
   }
 
@@ -38,22 +65,27 @@ class _FooterWidgetState extends State<FooterWidget> {
       children: [
         NavigationBar(
           onDestinationSelected: (int index) {
-            setState(() {
-              currentPageIndex = index;
-              _navigateToPage(index);
-            });
+            _navigateToPage(index);
           },
           indicatorColor: const Color(0xFF806491),
           selectedIndex: currentPageIndex,
-          destinations: const <Widget>[
+          destinations: <Widget>[
             NavigationDestination(
-              selectedIcon: Icon(Icons.home, color: Colors.white),
-              icon: Icon(Icons.home_outlined, color: Color(0xFF806491)),
+              selectedIcon: Icon(Icons.home,
+                  color:
+                      currentPageIndex == 0 ? Colors.white : Color(0xFF806491)),
+              icon: Icon(Icons.home_outlined,
+                  color:
+                      currentPageIndex == 0 ? Colors.white : Color(0xFF806491)),
               label: 'Accueil',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.book, color: Colors.white),
-              icon: Icon(Icons.book_outlined, color: Color(0xFF806491)),
+              selectedIcon: Icon(Icons.book,
+                  color:
+                      currentPageIndex == 1 ? Colors.white : Color(0xFF806491)),
+              icon: Icon(Icons.book_outlined,
+                  color:
+                      currentPageIndex == 1 ? Colors.white : Color(0xFF806491)),
               label: 'Loisirs',
             ),
           ],

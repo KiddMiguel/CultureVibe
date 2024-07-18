@@ -88,7 +88,8 @@ class _ListPageState extends State<ListPage> {
         ),
         backgroundColor: const Color(0xFF2F70AF),
       ),
-      bottomNavigationBar: FooterWidget(),
+      bottomNavigationBar: FooterWidget(
+          currentPage: 'Loisirs'), // Passer le nom de la page actuelle
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 500),
