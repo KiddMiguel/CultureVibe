@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:app/app.API/API_loisir.dart';
 import 'package:app/app.classname/header.dart';
 import 'package:app/app.classname/footer.dart';
 import 'package:app/app.classname/search_bar.dart';
-import 'package:app/components/create_loisir_form.dart';
-import 'package:app/screens/list_page.dart'; // Import the SearchBar widget
+import 'package:app/screens/list_page.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,113 +16,174 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
+  List<dynamic> _topLoisirs = [];
+  List<dynamic> _allLoisirs = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTopLoisir();
+    _fetchAllLoisirs();
+  }
+
+  Future<void> _fetchTopLoisir() async {
+    try {
+      final topLoisirs = await LoisirApi.getTopLoisir();
+      setState(() {
+        _topLoisirs = topLoisirs;
+      });
+    } catch (e) {
+      print('Failed to load top loisirs: $e');
+    }
+  }
+
+  Future<void> _fetchAllLoisirs() async {
+    try {
+      final allLoisirs = await LoisirApi.getAllLoisirs();
+      setState(() {
+        _allLoisirs = allLoisirs;
+      });
+    } catch (e) {
+      print('Failed to load all loisirs: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: HeaderWidget(
+        title: const HeaderWidget(
           title: 'Culture Vibe',
           imagePath: 'images/logo.png',
         ),
         backgroundColor: const Color(0xFF2F70AF),
       ),
-      bottomNavigationBar: FooterWidget(),
+      bottomNavigationBar: const FooterWidget(),
       body: <Widget>[
         /// Home page
         Column(
           children: [
             // La barre de recherche en haut
             const SearchBarWidget(),
-
             // Contenu de la page d'accueil
             Expanded(
               child: Column(
                 children: [
                   // `rect1` occupe 1/4 de l'espace vertical
                   Container(
-                    color: Colors.grey[300], // Couleur de fond de rect1
+                    color: Colors.grey[200], // Couleur de fond de rect1
                     height: MediaQuery.of(context).size.height /
                         4, // Hauteur de 1/4 de l'espace disponible
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'Top 5 note :',
+                          'Découvrez les meilleurs loisirs',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              children: [
-                                Image.asset('images/avatar.webp',
-                                    width: 50, height: 50),
-                                const Text('Avatar'),
-                                const Text('4.5'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Image.asset('images/goldenye.webp',
-                                    width: 50, height: 50),
-                                const Text('Golden Eye'),
-                                const Text('4.3'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Image.asset('images/matrixx.webp',
-                                    width: 50, height: 50),
-                                const Text('Matrix'),
-                                const Text('4.7'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Image.asset('images/meninblack.webp',
-                                    width: 50, height: 50),
-                                const Text('Men in Black'),
-                                const Text('4.4'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Image.asset('images/titanic.webp',
-                                    width: 50, height: 50),
-                                const Text('Titanic'),
-                                const Text('4.6'),
-                              ],
-                            ),
-                          ],
+                        const SizedBox(height: 5),
+                        CarouselSlider(
+                          options: CarouselOptions(
+                            height: MediaQuery.of(context).size.height / 4 - 40,
+                            enlargeCenterPage: true,
+                            enableInfiniteScroll: false,
+                            viewportFraction: 0.8,
+                          ),
+                          items: _topLoisirs.map((loisir) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                return Column(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          width: double.infinity,
+                                          height: 110,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.network(
+                                              loisir['image'] ??
+                                                  'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 0,
+                                          left: 0,
+                                          right: 0,
+                                          child: Container(
+                                            color: Colors.black.withOpacity(
+                                                0.5), // Fond noir semi-transparent
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              loisir['titre'] ??
+                                                  'Titre inconnu',
+                                              style: const TextStyle(
+                                                  color: Colors
+                                                      .white), // Pour que le texte soit visible sur le fond noir
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 8,
+                                          left: 8,
+                                          child: Row(
+                                            children: [
+                                              const Icon(Icons.grade_rounded,
+                                                  size: 15,
+                                                  color: Colors.yellow),
+                                              Text(
+                                                '${loisir['note'] ?? 0} avis',
+                                                style: const TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    RatingBarIndicator(
+                                      rating: (loisir['average_note'] ?? 0)
+                                          .toDouble(),
+                                      itemBuilder: (context, index) =>
+                                          const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      itemCount: 5,
+                                      itemSize: 20.0,
+                                      direction: Axis.horizontal,
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }).toList(),
                         ),
                       ],
                     ),
                   ),
-
                   // `rect2` occupe 3/4 de l'espace vertical
                   Expanded(
                     child: Container(
                       color: Colors.grey[200], // Couleur de fond de rect2
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // Naviguer vers la classe CreateLoisirForm
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HeroListPage(),
-                                    ),
-                                  );
-                                },
-                                child: const Text('filtre ->'),
+                              child: Text(
+                                'Toutes les activités',
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -130,29 +193,68 @@ class _HomePageState extends State<HomePage> {
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 10,
                               padding: const EdgeInsets.all(8.0),
-                              children: List.generate(4, (index) {
+                              children: _allLoisirs.map((loisir) {
                                 return Column(
                                   children: [
                                     Container(
-                                      color: Colors.grey,
-                                      height: 100,
-                                      child: Image.asset(
-                                        'images/avatar.webp', // Replace with your image paths
-                                        fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: 90,
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                            255, 93, 83, 85),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          loisir['image'] ??
+                                              'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
-                                      'Image ${index + 1}', // Replace with the actual name
-                                      style: TextStyle(
+                                      loisir['titre'] != null &&
+                                              loisir['titre'].length > 15
+                                          ? '${loisir['titre'].substring(0, 15)}...'
+                                          : loisir['titre'] ?? 'Titre inconnu',
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      '4.${index + 1}', // Replace with the actual rating
+                                      loisir['description'] != null &&
+                                              loisir['description'].length > 13
+                                          ? '${loisir['description'].substring(0, 13)}...'
+                                          : loisir['description'] ??
+                                              'Aucune description',
+                                    ),
+                                    RatingBarIndicator(
+                                      rating: ((loisir['moyen_note']) ?? 0.0)
+                                          .toDouble(),
+                                      itemBuilder: (context, index) =>
+                                          const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      itemCount: 5,
+                                      itemSize: 20.0,
+                                      direction: Axis.horizontal,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.grade_rounded,
+                                            size: 15, color: Colors.yellow),
+                                        Text(
+                                          '${loisir['note'] ?? 0} avis',
+                                          style: const TextStyle(
+                                              fontSize: 12, color: Colors.grey),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 );
-                              }),
+                              }).toList(),
                             ),
                           ),
                         ],
@@ -167,7 +269,7 @@ class _HomePageState extends State<HomePage> {
 
         /// Notifications page
         const Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(0.0),
           child: Column(
             children: <Widget>[
               Card(
