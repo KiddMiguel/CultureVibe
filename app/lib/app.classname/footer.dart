@@ -1,5 +1,6 @@
 import 'package:app/app.API/API_loisir.dart';
 import 'package:app/components/create_loisir_form.dart';
+import 'package:app/screens/home_page.dart'; // Assurez-vous d'importer la HomePage
 import 'package:flutter/material.dart';
 
 class FooterWidget extends StatefulWidget {
@@ -12,6 +13,20 @@ class FooterWidget extends StatefulWidget {
 class _FooterWidgetState extends State<FooterWidget> {
   int currentPageIndex = 0;
 
+  void _navigateToPage(int index) {
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+        break;
+      case 1:
+        // Ajoutez la navigation vers la page de loisirs si nécessaire
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -21,6 +36,7 @@ class _FooterWidgetState extends State<FooterWidget> {
           onDestinationSelected: (int index) {
             setState(() {
               currentPageIndex = index;
+              _navigateToPage(index);
             });
           },
           indicatorColor: const Color(0xFF806491),
@@ -32,8 +48,7 @@ class _FooterWidgetState extends State<FooterWidget> {
               label: 'Accueil',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.book,
-                  color: Colors.white), // Appropriate icon for loisirs
+              selectedIcon: Icon(Icons.book, color: Colors.white),
               icon: Icon(Icons.book_outlined, color: Colors.white),
               label: 'Loisirs',
             ),
