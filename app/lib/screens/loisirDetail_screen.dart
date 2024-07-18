@@ -35,8 +35,7 @@ class LoisirDetailScreen extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                      loisir['image'] ??
-                          'https://th.bing.com/th/id/OIP.E2sjvXHdm-8mAZ0Zz6qOpAHaE8?rs=1&pid=ImgDetMain',
+                      loisir['image'] ?? 'https://via.placeholder.com/150',
                       height: 200,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -58,7 +57,7 @@ class LoisirDetailScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Catégorie: ${loisir['category  '] ?? 'Non disponible'}',
+                  'Catégorie: ${loisir['categorie'] ?? 'Non disponible'}',
                   style: TextStyle(
                       fontSize: 16,
                       fontStyle: FontStyle.italic,
