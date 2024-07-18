@@ -11,14 +11,14 @@ class HeroListPage extends StatefulWidget {
 }
 
 class _HeroListPageState extends State<HeroListPage> {
-  List<Map<String, dynamic>> _loisirs = [
+  final List<Map<String, dynamic>> _loisirs = [
     {
       'id': '1',
       'image':
           'https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
       'titre': 'a',
       'description': 'Description du loisir 1',
-      'categorie': 'Catégorie 1',
+      'categorie': 'littérature',
       'note': 4.5,
       'date_publication': '2024-07-15'
     },
@@ -28,7 +28,7 @@ class _HeroListPageState extends State<HeroListPage> {
           'https://images.pexels.com/photos/2662116/pexels-photo-2662116.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
       'titre': 'c',
       'description': 'Description du loisir 2',
-      'categorie': 'Catégorie 2',
+      'categorie': 'film',
       'note': 4.5,
       'date_publication': '2024-07-14'
     },
@@ -38,7 +38,7 @@ class _HeroListPageState extends State<HeroListPage> {
           'https://images.pexels.com/photos/273935/pexels-photo-273935.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
       'titre': 'b',
       'description': 'Description du loisir 3',
-      'categorie': 'Catégorie 3',
+      'categorie': 'séries',
       'note': 4.5,
       'date_publication': '2024-07-13'
     },
@@ -48,7 +48,7 @@ class _HeroListPageState extends State<HeroListPage> {
           'https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
       'titre': 'a',
       'description': 'Description du loisir 4',
-      'categorie': 'Catégorie 4',
+      'categorie': 'littérature',
       'note': 4.5,
       'date_publication': '2024-07-12'
     },
@@ -58,7 +58,7 @@ class _HeroListPageState extends State<HeroListPage> {
           'https://images.pexels.com/photos/462024/pexels-photo-462024.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
       'titre': 'e',
       'description': 'Description du loisir 5',
-      'categorie': 'Catégorie 5',
+      'categorie': 'film',
       'note': 4.5,
       'date_publication': '2024-07-11'
     },
@@ -68,37 +68,52 @@ class _HeroListPageState extends State<HeroListPage> {
           'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
       'titre': 'c',
       'description': 'Description du loisir 6',
-      'categorie': 'Catégorie 6',
+      'categorie': 'séries',
       'note': 4.5,
       'date_publication': '2024-07-10'
     },
   ];
 
+  late List<Map<String, dynamic>> _filteredLoisirs;
+  String _selectedCategory = 'Tous';
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredLoisirs = _loisirs;
+  }
+
   void _sortLoisirsByTitle() {
     setState(() {
-      _loisirs.sort((a, b) => a['titre'].compareTo(b['titre']));
+      _filteredLoisirs.sort((a, b) => a['titre'].compareTo(b['titre']));
     });
   }
 
   void _sortLoisirsByDate() {
     setState(() {
-      _loisirs.sort(
+      _filteredLoisirs.sort(
           (a, b) => b['date_publication'].compareTo(a['date_publication']));
+    });
+  }
+
+  void _onCategoryChanged(String? category) {
+    setState(() {
+      _selectedCategory = category!;
+      // Logic to call API and update _filteredLoisirs will be added here in the future
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: HeaderWidget(
+        title: const HeaderWidget(
           title: 'Culture Vibe',
           imagePath: 'images/logo.png',
         ),
         backgroundColor: const Color(0xFF2F70AF),
       ),
-      bottomNavigationBar: FooterWidget(),
+      bottomNavigationBar: const FooterWidget(),
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 500),
@@ -111,6 +126,17 @@ class _HeroListPageState extends State<HeroListPage> {
                     onPressed: _sortLoisirsByTitle,
                     child: const Text('a-z'),
                   ),
+                  DropdownButton<String>(
+                    value: _selectedCategory,
+                    onChanged: _onCategoryChanged,
+                    items: <String>['Tous', 'littérature', 'film', 'séries']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
                   ElevatedButton(
                     onPressed: _sortLoisirsByDate,
                     child: const Text('Date'),
@@ -119,9 +145,9 @@ class _HeroListPageState extends State<HeroListPage> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: _loisirs.length,
+                  itemCount: _filteredLoisirs.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final loisir = _loisirs[index];
+                    final loisir = _filteredLoisirs[index];
                     return InkWell(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
