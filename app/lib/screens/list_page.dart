@@ -2,88 +2,78 @@ import 'package:flutter/material.dart';
 import 'package:app/app.classname/header.dart';
 import 'package:app/app.classname/footer.dart';
 import 'package:app/screens/loisirDetail_screen.dart'; // Assurez-vous d'importer le fichier de détail
+import 'package:app/app.API/API_loisir.dart';
 
-class HeroListPage extends StatefulWidget {
-  const HeroListPage({Key? key}) : super(key: key);
+class ListPage extends StatefulWidget {
+  const ListPage({Key? key}) : super(key: key);
 
   @override
-  _HeroListPageState createState() => _HeroListPageState();
+  _ListPageState createState() => _ListPageState();
 }
 
-class _HeroListPageState extends State<HeroListPage> {
-  List<Map<String, dynamic>> _loisirs = [
-    {
-      'id': '1',
-      'image':
-          'https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      'titre': 'a',
-      'description': 'Description du loisir 1',
-      'categorie': 'Catégorie 1',
-      'note': 4.5,
-      'date_publication': '2024-07-15'
-    },
-    {
-      'id': '2',
-      'image':
-          'https://images.pexels.com/photos/2662116/pexels-photo-2662116.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'titre': 'c',
-      'description': 'Description du loisir 2',
-      'categorie': 'Catégorie 2',
-      'note': 4.5,
-      'date_publication': '2024-07-14'
-    },
-    {
-      'id': '3',
-      'image':
-          'https://images.pexels.com/photos/273935/pexels-photo-273935.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'titre': 'b',
-      'description': 'Description du loisir 3',
-      'categorie': 'Catégorie 3',
-      'note': 4.5,
-      'date_publication': '2024-07-13'
-    },
-    {
-      'id': '4',
-      'image':
-          'https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'titre': 'a',
-      'description': 'Description du loisir 4',
-      'categorie': 'Catégorie 4',
-      'note': 4.5,
-      'date_publication': '2024-07-12'
-    },
-    {
-      'id': '5',
-      'image':
-          'https://images.pexels.com/photos/462024/pexels-photo-462024.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'titre': 'e',
-      'description': 'Description du loisir 5',
-      'categorie': 'Catégorie 5',
-      'note': 4.5,
-      'date_publication': '2024-07-11'
-    },
-    {
-      'id': '6',
-      'image':
-          'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'titre': 'c',
-      'description': 'Description du loisir 6',
-      'categorie': 'Catégorie 6',
-      'note': 4.5,
-      'date_publication': '2024-07-10'
-    },
-  ];
+class _ListPageState extends State<ListPage> {
+  List<Map<String, dynamic>> _loisirs = [];
+  bool _isLoading = true;
+  String _sortCriteria = 'titre'; // Initial sort criteria
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchLoisirs();
+  }
+
+  Future<void> _fetchLoisirs() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      var loisirs = await LoisirApi.getAllLoisirs();
+      setState(() {
+        _loisirs = loisirs
+            .map<Map<String, dynamic>>((loisir) => {
+                  'id': loisir['id'].toString(),
+                  'image': loisir['image'],
+                  'titre': loisir['titre'],
+                  'description': loisir['description'],
+                  'categorie': loisir['categorie'],
+                  'note': loisir['note'],
+                  'date_publication': loisir['date_publication'],
+                })
+            .toList();
+        _sortLoisirs();
+      });
+    } catch (e) {
+      print('Erreur lors de la récupération des loisirs: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _sortLoisirs() {
+    setState(() {
+      if (_sortCriteria == 'titre') {
+        _loisirs.sort((a, b) => a['titre'].compareTo(b['titre']));
+      } else if (_sortCriteria == 'date') {
+        _loisirs.sort(
+            (a, b) => b['date_publication'].compareTo(a['date_publication']));
+      }
+    });
+  }
 
   void _sortLoisirsByTitle() {
     setState(() {
-      _loisirs.sort((a, b) => a['titre'].compareTo(b['titre']));
+      _sortCriteria = 'titre';
+      _sortLoisirs();
     });
   }
 
   void _sortLoisirsByDate() {
     setState(() {
-      _loisirs.sort(
-          (a, b) => b['date_publication'].compareTo(a['date_publication']));
+      _sortCriteria = 'date';
+      _sortLoisirs();
     });
   }
 
@@ -118,52 +108,55 @@ class _HeroListPageState extends State<HeroListPage> {
                 ],
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: _loisirs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final loisir = _loisirs[index];
-                    return InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => LoisirDetailScreen(
-                                  loisir: loisir,
-                                )));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Hero(
-                              tag: loisir['id'],
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  loisir['image'],
-                                  width: 200,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                child: _isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        itemCount: _loisirs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final loisir = _loisirs[index];
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => LoisirDetailScreen(
+                                        loisir: loisir,
+                                      )));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
                                 children: [
-                                  Text(
-                                    loisir['titre'],
+                                  Hero(
+                                    tag: loisir['id'],
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.network(
+                                        loisir['image'],
+                                        width: 200,
+                                      ),
+                                    ),
                                   ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    'Date: ${loisir['date_publication']}',
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          loisir['titre'],
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          'Date: ${loisir['date_publication']}',
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
             ],
           ),
