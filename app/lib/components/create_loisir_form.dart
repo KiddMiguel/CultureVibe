@@ -1,52 +1,75 @@
-import 'package:app/app.API/API_loisir.dart'; // Assurez-vous que ce chemin est correct
+import 'package:app/app.API/API_loisir.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class CreateLoisirForm extends StatefulWidget {
-  const CreateLoisirForm({super.key});
-
   @override
-  State<CreateLoisirForm> createState() => _CreateLoisirFormState();
+  _CreateLoisirFormState createState() => _CreateLoisirFormState();
 }
 
 class _CreateLoisirFormState extends State<CreateLoisirForm> {
   final _formKey = GlobalKey<FormState>();
-  List<Category> categories = [];
-  Category? selectedCategory;
-
-  Future<List<Category>> getAllCategories() async {
-    try {
-      var response = await LoisirApi.getAllCategories();
-      return response.map<Category>((json) => Category.fromJson(json)).toList();
-    } catch (e) {
-      return Future.error("Error: ${e.toString()}");
-    }
-  }
+  String? _title;
+  String? _description;
+  DateTime? _publicationDate;
+  String? _image;
+  Category? _selectedCategory;
+  List<Category> _categories = [];
 
   @override
   void initState() {
     super.initState();
-    getAllCategories().then((categories) {
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    try {
+      final categories = await LoisirApi.getAllCategories();
       setState(() {
-        this.categories = categories;
+        _categories =
+            categories.map<Category>((json) => parseCategory(json)).toList();
+        print("Catégories récupérées : $_categories");
       });
-    }).catchError((error) {
-      // Handle errors if needed
-      print(error);
-    });
+    } catch (e) {
+      print('Failed to load categories: $e');
+    }
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      final newLoisir = {
+        'titre': _title,
+        'description': _description,
+        'date_publication': DateFormat('yyyy-MM-dd').format(_publicationDate!),
+        'image': _image,
+        'category_id': _selectedCategory!.id,
+      };
+      try {
+        await LoisirApi.createLoisir(newLoisir);
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Loisir créé avec succès')));
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Erreur lors de la création du loisir: $e')));
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Créer Loisir'),
+        title: const Text('Créer un loisir'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: ListView(
-            children: [
+            children: <Widget>[
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Titre'),
                 validator: (value) {
@@ -55,63 +78,76 @@ class _CreateLoisirFormState extends State<CreateLoisirForm> {
                   }
                   return null;
                 },
+                onSaved: (value) {
+                  _title = value;
+                },
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Description'),
                 maxLines: 3,
-              ),
-              ListTile(
-                title: const Text('Date de publication'),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: () async {
-                  DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2101),
-                  );
-                  if (picked != null) {
-                    // Mise à jour de l'état ou stockage de la date
-                  }
+                onSaved: (value) {
+                  _description = value;
                 },
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Image URL'),
+                decoration:
+                    const InputDecoration(labelText: 'Date de publication'),
+                onTap: () async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  DateTime? date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (date != null) {
+                    setState(() {
+                      _publicationDate = date;
+                    });
+                  }
+                },
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer une URL d\'image';
+                  if (_publicationDate == null) {
+                    return 'Veuillez sélectionner une date';
                   }
                   return null;
+                },
+                onSaved: (value) {
+                  // Date is already set
+                },
+                readOnly: true,
+                controller: TextEditingController(
+                  text: _publicationDate == null
+                      ? ''
+                      : DateFormat('yyyy-MM-dd').format(_publicationDate!),
+                ),
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Image URL'),
+                onSaved: (value) {
+                  _image = value;
                 },
               ),
               DropdownButtonFormField<Category>(
                 decoration: const InputDecoration(labelText: 'Catégorie'),
-                value: selectedCategory,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedCategory = newValue;
-                  });
-                },
-                items: categories.map<DropdownMenuItem<Category>>((category) {
+                items: _categories.map((Category category) {
                   return DropdownMenuItem<Category>(
                     value: category,
-                    child: Text(category.nom),
+                    child: Text(category.name),
                   );
                 }).toList(),
-                validator: (value) {
-                  if (value == null) {
-                    return 'Veuillez sélectionner une catégorie';
-                  }
-                  return null;
+                onChanged: (Category? newValue) {
+                  setState(() {
+                    _selectedCategory = newValue;
+                  });
                 },
+                validator: (value) => value == null
+                    ? 'Veuillez sélectionner une catégorie'
+                    : null,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Validation et traitement des données
-                  }
-                },
+                onPressed: _submitForm,
                 child: const Text('Créer'),
               ),
             ],
@@ -122,16 +158,21 @@ class _CreateLoisirFormState extends State<CreateLoisirForm> {
   }
 }
 
+Category parseCategory(Map<String, dynamic> json) {
+  return Category(
+    id: json['id'],
+    name: json['nom'],
+  );
+}
+
 class Category {
   final int id;
-  final String nom;
+  final String name;
 
-  Category({required this.id, required this.nom});
+  Category({required this.id, required this.name});
 
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
-      id: json['id'],
-      nom: json['nom'],
-    );
+  @override
+  String toString() {
+    return 'Category{id: $id, name: $name}';
   }
 }
