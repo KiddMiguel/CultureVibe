@@ -6,12 +6,10 @@ Bienvenue dans le projet CultureVibe ! Ce README vous guidera à travers le proc
 
 ## Table des matières
 1. [Présentation du projet](#présentation-du-projet)
-3. [Installation](#installation)
-4. [Exécution de l'application](#exécution-de-lapplication)
-5. [Structure du projet](#structure-du-projet)
-6. [Contribution](#contribution)
-7. [Licence](#licence)
-8. [Requêtes SQL](#requêtes-sql)
+2. [Installation](#installation)
+3. [Exécution de l'application](#exécution-de-lapplication)
+4. [Structure du projet](#structure-du-projet)
+5. [Requêtes SQL](#requêtes-sql)
 
 ## Présentation du projet
 CultureVibe est une application mobile qui permet aux utilisateurs de partager et de découvrir des loisirs non sportifs au sein d'une communauté. L'application est construite avec Flutter pour le frontend et Node.js pour le backend.
