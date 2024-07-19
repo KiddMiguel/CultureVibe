@@ -3,6 +3,7 @@ import 'package:app/app.classname/header.dart';
 import 'package:app/app.classname/footer.dart';
 import 'package:app/screens/loisirDetail_screen.dart'; // Assurez-vous d'importer le fichier de détail
 import 'package:app/app.API/API_loisir.dart';
+import 'package:intl/intl.dart'; // Import intl for date formatting
 
 class ListPage extends StatefulWidget {
   const ListPage({Key? key}) : super(key: key);
@@ -38,7 +39,8 @@ class _ListPageState extends State<ListPage> {
                   'description': loisir['description'],
                   'categorie': loisir['categorie'],
                   'note': loisir['note'],
-                  'date_publication': loisir['date_publication'],
+                  'date_publication': DateFormat('dd/MM/yyyy')
+                      .format(DateTime.parse(loisir['date_publication'])),
                 })
             .toList();
         _sortLoisirs();
@@ -131,7 +133,11 @@ class _ListPageState extends State<ListPage> {
                                       borderRadius: BorderRadius.circular(8),
                                       child: Image.network(
                                         loisir['image'],
-                                        width: 200,
+                                        width:
+                                            100, // Limiting the width of the image
+                                        height:
+                                            100, // Limiting the height of the image
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
