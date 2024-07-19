@@ -49,12 +49,14 @@ class _HomePageState extends State<HomePage> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           return Center(
                               child: Text('Erreur : ${snapshot.error}'));
                         } else if (!snapshot.hasData || snapshot.data == null) {
-                          return Center(child: Text('Aucun loisir trouvé'));
+                          return const Center(
+                              child: Text('Aucun loisir trouvé'));
                         } else {
                           var loisirs = snapshot.data as List<dynamic>;
                           loisirs.sort((a, b) =>
