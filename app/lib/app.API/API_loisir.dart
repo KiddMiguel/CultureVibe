@@ -92,4 +92,20 @@ class LoisirApi {
       return Future.error("Error: ${e.toString()}");
     }
   }
+
+  // Creer une note
+  static Future<void> createRating(Map<String, dynamic> ratingData) async {
+    try {
+      var response = await http.post(
+        Uri.parse(baseUrl + "notation"),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(ratingData),
+      );
+      if (response.statusCode != 201) {
+        throw Exception('Failed to create rating ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error: ${e.toString()}');
+    }
+  }
 }

@@ -4,6 +4,7 @@ import 'package:app/app.classname/header.dart';
 import 'package:app/app.classname/footer.dart';
 import 'package:app/app.classname/search_bar.dart';
 import 'package:app/screens/list_page.dart';
+import 'package:app/screens/loisirDetail_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -94,76 +95,88 @@ class _HomePageState extends State<HomePage> {
                           items: _topLoisirs.map((loisir) {
                             return Builder(
                               builder: (BuildContext context) {
-                                return Column(
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        Container(
-                                          width: double.infinity,
-                                          height: 110,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: Image.network(
-                                              loisir['image'] ??
-                                                  'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          bottom: 0,
-                                          left: 0,
-                                          right: 0,
-                                          child: Container(
-                                            color: Colors.black.withOpacity(
-                                                0.5), // Fond noir semi-transparent
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              loisir['titre'] ??
-                                                  'Titre inconnu',
-                                              style: const TextStyle(
-                                                  color: Colors
-                                                      .white), // Pour que le texte soit visible sur le fond noir
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: 8,
-                                          left: 8,
-                                          child: Row(
-                                            children: [
-                                              const Icon(Icons.grade_rounded,
-                                                  size: 15,
-                                                  color: Colors.yellow),
-                                              Text(
-                                                '${loisir['note'] ?? 0} avis',
-                                                style: const TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.white),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    RatingBarIndicator(
-                                      rating: (loisir['average_note'] ?? 0)
-                                          .toDouble(),
-                                      itemBuilder: (context, index) =>
-                                          const Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            LoisirDetailScreen(loisir: loisir),
                                       ),
-                                      itemCount: 5,
-                                      itemSize: 20.0,
-                                      direction: Axis.horizontal,
-                                    ),
-                                  ],
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          Container(
+                                            width: double.infinity,
+                                            height: 110,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image.network(
+                                                loisir['image'] ??
+                                                    'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            child: Container(
+                                              color: Colors.black.withOpacity(
+                                                  0.5), // Fond noir semi-transparent
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                loisir['titre'] ??
+                                                    'Titre inconnu',
+                                                style: const TextStyle(
+                                                    color: Colors
+                                                        .white), // Pour que le texte soit visible sur le fond noir
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 8,
+                                            left: 8,
+                                            child: Row(
+                                              children: [
+                                                const Icon(Icons.grade_rounded,
+                                                    size: 15,
+                                                    color: Colors.yellow),
+                                                Text(
+                                                  '${loisir['note'] ?? 0} avis',
+                                                  style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      RatingBarIndicator(
+                                        rating: (loisir['average_note'] ?? 0)
+                                            .toDouble(),
+                                        itemBuilder: (context, index) =>
+                                            const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        itemCount: 5,
+                                        itemSize: 20.0,
+                                        direction: Axis.horizontal,
+                                      ),
+                                    ],
+                                  ),
                                 );
                               },
                             );
@@ -195,65 +208,81 @@ class _HomePageState extends State<HomePage> {
                               mainAxisSpacing: 10,
                               padding: const EdgeInsets.all(8.0),
                               children: _allLoisirs.map((loisir) {
-                                return Column(
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      height: 90,
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromARGB(
-                                            255, 93, 83, 85),
-                                        borderRadius: BorderRadius.circular(10),
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            LoisirDetailScreen(loisir: loisir),
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          loisir['image'] ??
-                                              'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
-                                          fit: BoxFit.cover,
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        height: 90,
+                                        decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                              255, 93, 83, 85),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Image.network(
+                                            loisir['image'] ??
+                                                'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      loisir['titre'] != null &&
-                                              loisir['titre'].length > 15
-                                          ? '${loisir['titre'].substring(0, 15)}...'
-                                          : loisir['titre'] ?? 'Titre inconnu',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      loisir['description'] != null &&
-                                              loisir['description'].length > 13
-                                          ? '${loisir['description'].substring(0, 13)}...'
-                                          : loisir['description'] ??
-                                              'Aucune description',
-                                    ),
-                                    RatingBarIndicator(
-                                      rating: ((loisir['moyen_note']) ?? 0.0)
-                                          .toDouble(),
-                                      itemBuilder: (context, index) =>
-                                          const Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        loisir['titre'] != null &&
+                                                loisir['titre'].length > 15
+                                            ? '${loisir['titre'].substring(0, 15)}...'
+                                            : loisir['titre'] ??
+                                                'Titre inconnu',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                      itemCount: 5,
-                                      itemSize: 20.0,
-                                      direction: Axis.horizontal,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.grade_rounded,
-                                            size: 15, color: Colors.yellow),
-                                        Text(
-                                          '${loisir['note'] ?? 0} avis',
-                                          style: const TextStyle(
-                                              fontSize: 12, color: Colors.grey),
+                                      Text(
+                                        loisir['description'] != null &&
+                                                loisir['description'].length >
+                                                    13
+                                            ? '${loisir['description'].substring(0, 13)}...'
+                                            : loisir['description'] ??
+                                                'Aucune description',
+                                      ),
+                                      RatingBarIndicator(
+                                        rating: ((loisir['moyen_note']) ?? 0.0)
+                                            .toDouble(),
+                                        itemBuilder: (context, index) =>
+                                            const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
                                         ),
-                                      ],
-                                    ),
-                                  ],
+                                        itemCount: 5,
+                                        itemSize: 20.0,
+                                        direction: Axis.horizontal,
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.grade_rounded,
+                                              size: 15, color: Colors.yellow),
+                                          Text(
+                                            '${loisir['note'] ?? 0} avis',
+                                            style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 );
                               }).toList(),
                             ),

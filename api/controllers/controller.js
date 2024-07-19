@@ -36,7 +36,7 @@ exports.createLoisir = async (req, res) => {
 exports.createNotation = async (req, res) => {
     try{
         const currentDate = new Date().toISOString().split('T')[0];
-        const loisir = await pool.query('INSERT INTO notation (note, loisir_id, date_notation) VALUES (?, ?, ?)', [req.body.note, req.body.loisir_id, date_publication]);
+        const loisir = await pool.query('INSERT INTO notation (note, loisir_id, date_notation) VALUES (?, ?, ?)', [req.body.note, req.body.loisir_id, req.body.date_notation]);
         res.status(201).json({message: 'Notation créée'});
     }catch(err){
         res.status(400).json({message: err.message});
