@@ -6,7 +6,6 @@ Bienvenue dans le projet CultureVibe ! Ce README vous guidera à travers le proc
 
 ## Table des matières
 1. [Présentation du projet](#présentation-du-projet)
-2. [Prérequis](#prérequis)
 3. [Installation](#installation)
 4. [Exécution de l'application](#exécution-de-lapplication)
 5. [Structure du projet](#structure-du-projet)
@@ -24,7 +23,8 @@ CultureVibe est une application mobile qui permet aux utilisateurs de partager e
   - Recherche par type de loisir ou par nom
   - Liste de catégories
   - Système de notation
-  - Top 5 des activités sur la page d'accueil
+  - Ajout des loisirs
+  - Top 5 des loisirs sur la page d'accueil
 
 ### Backend
 - **Framework** : Node.js
@@ -33,12 +33,6 @@ CultureVibe est une application mobile qui permet aux utilisateurs de partager e
   - mariadb pour la gestion de la base de données
   - cors
   - body-paser
-
-## Prérequis
-Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre machine :
-- [Node.js](https://nodejs.org/) (version 14 ou supérieure)
-- [Flutter](https://flutter.dev/docs/get-started/install) (version 2.0 ou supérieure)
-- [Git](https://git-scm.com/)
 
 ## Installation
 
@@ -64,12 +58,7 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
         DB_PORT = 3306
      ```
 
-4. Lancez les migrations pour créer les tables :
-   ```bash
-   npx sequelize db:migrate
-   ```
-
-5. Démarrez le serveur :
+4. Démarrez le serveur :
    ```bash
    npm start
    ```
@@ -77,8 +66,8 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 ### Frontend
 1. Clonez le dépôt frontend :
    ```bash
-   git clone <URL_DU_DÉPÔT_FRONTEND>
-   cd frontend
+   git clone https://github.com/KiddMiguel/CultureVibe.git
+   cd app
    ```
 
 2. Installez les dépendances :
