@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
           title: 'Culture Vibe',
           imagePath: 'images/logo.png',
         ),
-        backgroundColor: const Color(0xFF2F70AF),
+        backgroundColor: const Color(0xFF806491),
       ),
       bottomNavigationBar: FooterWidget(currentPage: 'Accueil'), // Passer le nom de la page actuelle
       body: <Widget>[

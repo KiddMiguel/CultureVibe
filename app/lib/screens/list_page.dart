@@ -124,7 +124,7 @@ class _ListPageState extends State<ListPage> {
           title: 'Culture Vibe',
           imagePath: 'images/logo.png',
         ),
-        backgroundColor: const Color(0xFF2F70AF),
+        backgroundColor: const Color(0xFF806491),
       ),
       bottomNavigationBar: FooterWidget(currentPage: 'Loisirs'), // Passer le nom de la page actuelle
       body: Center(
