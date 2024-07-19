@@ -6,13 +6,10 @@ Bienvenue dans le projet CultureVibe ! Ce README vous guidera à travers le proc
 
 ## Table des matières
 1. [Présentation du projet](#présentation-du-projet)
-2. [Prérequis](#prérequis)
-3. [Installation](#installation)
-4. [Exécution de l'application](#exécution-de-lapplication)
-5. [Structure du projet](#structure-du-projet)
-6. [Contribution](#contribution)
-7. [Licence](#licence)
-8. [Requêtes SQL](#requêtes-sql)
+2. [Installation](#installation)
+3. [Exécution de l'application](#exécution-de-lapplication)
+4. [Structure du projet](#structure-du-projet)
+5. [Requêtes SQL](#requêtes-sql)
 
 ## Présentation du projet
 CultureVibe est une application mobile qui permet aux utilisateurs de partager et de découvrir des loisirs non sportifs au sein d'une communauté. L'application est construite avec Flutter pour le frontend et Node.js pour le backend.
@@ -24,7 +21,8 @@ CultureVibe est une application mobile qui permet aux utilisateurs de partager e
   - Recherche par type de loisir ou par nom
   - Liste de catégories
   - Système de notation
-  - Top 5 des activités sur la page d'accueil
+  - Ajout des loisirs
+  - Top 5 des loisirs sur la page d'accueil
 
 ### Backend
 - **Framework** : Node.js
@@ -33,12 +31,6 @@ CultureVibe est une application mobile qui permet aux utilisateurs de partager e
   - mariadb pour la gestion de la base de données
   - cors
   - body-paser
-
-## Prérequis
-Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre machine :
-- [Node.js](https://nodejs.org/) (version 14 ou supérieure)
-- [Flutter](https://flutter.dev/docs/get-started/install) (version 2.0 ou supérieure)
-- [Git](https://git-scm.com/)
 
 ## Installation
 
@@ -64,12 +56,7 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
         DB_PORT = 3306
      ```
 
-4. Lancez les migrations pour créer les tables :
-   ```bash
-   npx sequelize db:migrate
-   ```
-
-5. Démarrez le serveur :
+4. Démarrez le serveur :
    ```bash
    npm start
    ```
@@ -77,8 +64,8 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 ### Frontend
 1. Clonez le dépôt frontend :
    ```bash
-   git clone <URL_DU_DÉPÔT_FRONTEND>
-   cd frontend
+   git clone https://github.com/KiddMiguel/CultureVibe.git
+   cd app
    ```
 
 2. Installez les dépendances :
@@ -175,7 +162,7 @@ CREATE TABLE notation (
   (15, 'Yoga et méditation', 'Offres sportives pour la santé mentale.', '2020-01-01', 'https://fr.heartfulness.org/wp-content/uploads/2019/12/Affiche-1.png', 6),
   (17, 'Warzone', 'description', '2024-07-19', 'https://chocobonplan.com/wp-content/uploads/2024/04/SLIDER-call-of-duty-warzone-3-saison-3-article-blog.jpg', 6);
   
-  NSERT INTO `notation` (`id`, `loisir_id`, `note`, `date_notation`) VALUES
+  INSERT INTO `notation` (`id`, `loisir_id`, `note`, `date_notation`) VALUES
   (1, 1, 5, '2023-01-10'),
   (2, 1, 4, '2023-02-15'),
   (3, 2, 5, '2023-03-20'),
