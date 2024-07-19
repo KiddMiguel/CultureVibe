@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:app/app.classname/header.dart';
 import 'package:app/app.classname/footer.dart';
-import 'package:app/screens/loisirDetail_screen.dart'; // Assurez-vous d'importer le fichier de détail
 import 'package:app/app.API/API_loisir.dart';
-import 'package:intl/intl.dart'; // Import intl for date formatting
+import 'package:intl/intl.dart';
+import 'package:app/components/sort_filter_buttons.dart';
+import 'package:app/components/loisir_item.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({Key? key}) : super(key: key);
@@ -125,53 +126,18 @@ class _ListPageState extends State<ListPage> {
         ),
         backgroundColor: const Color(0xFF2F70AF),
       ),
-      bottomNavigationBar: FooterWidget(
-          currentPage: 'Loisirs'), // Passer le nom de la page actuelle
+      bottomNavigationBar: FooterWidget(currentPage: 'Loisirs'), // Passer le nom de la page actuelle
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 500),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      onPressed: _sortLoisirsByTitle,
-                      child: const Text('a-z'),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: _sortLoisirsByDate,
-                      child: const Text('Date'),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    DropdownButton<String>(
-                      value: _selectedCategory,
-                      hint: const Text('Catégories'),
-                      items: _categories.map((String category) {
-                        return DropdownMenuItem<String>(
-                          value: category,
-                          child: Text(category),
-                        );
-                      }).toList(),
-                      onChanged: _filterByCategory,
-                      underline: Container(
-                        height: 2,
-                        color: const Color(0xFF2F70AF),
-                      ),
-                    ),
-                  ],
-                ),
+              SortFilterButtons(
+                selectedCategory: _selectedCategory,
+                categories: _categories,
+                onSortByTitle: _sortLoisirsByTitle,
+                onSortByDate: _sortLoisirsByDate,
+                onCategorySelected: _filterByCategory,
               ),
               Expanded(
                 child: _isLoading
@@ -180,90 +146,7 @@ class _ListPageState extends State<ListPage> {
                         itemCount: _loisirs.length,
                         itemBuilder: (BuildContext context, int index) {
                           final loisir = _loisirs[index];
-                          return InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => LoisirDetailScreen(
-                                        loisir: loisir,
-                                      )));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Hero(
-                                    tag: loisir['id'],
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.network(
-                                        loisir['image'],
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          loisir['titre'],
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Text(
-                                          'Date: ${loisir['date_publication']}',
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Text(
-                                          'Catégorie: ${loisir['categorie']}',
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                              size: 20,
-                                            ),
-                                            const SizedBox(width: 5),
-                                            Text(
-                                              '${loisir['moyen_note']}/5',
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.comment,
-                                              color: Colors.grey,
-                                              size: 20,
-                                            ),
-                                            const SizedBox(width: 5),
-                                            Text(
-                                              '${loisir['note']} avis',
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                          return LoisirItem(loisir: loisir);
                         },
                       ),
               ),
