@@ -8,7 +8,6 @@ exports.getLoisir = async (req, res) => {
             loisir.moyen_note = parseFloat(loisir.moyen_note);
             loisir.note = parseFloat(loisir.note);
         });
-        console.log(loisir);
         res.status(200).json(loisir);
     }catch(err){
         res.status(400).json({message: err.message});

@@ -72,13 +72,6 @@ class _LoisirDetailScreenState extends State<LoisirDetailScreen> {
                 child:
                     Text('Erreur de chargement des données de localisation'));
           } else {
-            // Conversion de la date en français
-            String formattedDate = '';
-            if (widget.loisir['date_publication'] != null) {
-              DateTime date = DateTime.parse(widget.loisir['date_publication']);
-              formattedDate = DateFormat.yMMMMd('fr_FR').format(date);
-            }
-
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Card(
@@ -140,7 +133,7 @@ class _LoisirDetailScreenState extends State<LoisirDetailScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Date: $formattedDate',
+                        'Date: ${widget.loisir['date_publication']?.toString() ?? 'Aucune date'}',
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.grey,
