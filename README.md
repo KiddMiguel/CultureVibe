@@ -162,7 +162,7 @@ CREATE TABLE notation (
   (15, 'Yoga et méditation', 'Offres sportives pour la santé mentale.', '2020-01-01', 'https://fr.heartfulness.org/wp-content/uploads/2019/12/Affiche-1.png', 6),
   (17, 'Warzone', 'description', '2024-07-19', 'https://chocobonplan.com/wp-content/uploads/2024/04/SLIDER-call-of-duty-warzone-3-saison-3-article-blog.jpg', 6);
   
-  NSERT INTO `notation` (`id`, `loisir_id`, `note`, `date_notation`) VALUES
+  INSERT INTO `notation` (`id`, `loisir_id`, `note`, `date_notation`) VALUES
   (1, 1, 5, '2023-01-10'),
   (2, 1, 4, '2023-02-15'),
   (3, 2, 5, '2023-03-20'),
