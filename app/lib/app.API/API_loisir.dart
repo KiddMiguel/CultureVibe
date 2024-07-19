@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 
 class LoisirApi {
-  static const String baseUrl = "http://127.0.0.1:8000/";
+  static const String baseUrl = "http://10.0.2.2:8000/";
   // static const String baseUrl = "http://localhost:8000/";
 
   // Rechercher les loisirs
@@ -90,6 +90,22 @@ class LoisirApi {
       }
     } catch (e) {
       return Future.error("Error: ${e.toString()}");
+    }
+  }
+
+  // Creer une note
+  static Future<void> createRating(Map<String, dynamic> ratingData) async {
+    try {
+      var response = await http.post(
+        Uri.parse(baseUrl + "notation"),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(ratingData),
+      );
+      if (response.statusCode != 201) {
+        throw Exception('Failed to create rating ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error: ${e.toString()}');
     }
   }
 }

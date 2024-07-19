@@ -1,4 +1,5 @@
 import 'package:app/app.API/API_loisir.dart';
+import 'package:app/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -51,8 +52,12 @@ class _CreateLoisirFormState extends State<CreateLoisirForm> {
         await LoisirApi.createLoisir(newLoisir);
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Loisir créé avec succès')));
-        // Ramener l'utilisateur à la page d'accueil
-        Navigator.pop(context);
+        // Ramener l'utilisateur à la page d'accueil et supprimer toutes les routes précédentes
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+          (Route<dynamic> route) => false,
+        );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Erreur lors de la création du loisir: $e')));

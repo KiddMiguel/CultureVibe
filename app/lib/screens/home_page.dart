@@ -60,7 +60,8 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: const Color(0xFF2F70AF),
       ),
-      bottomNavigationBar: const FooterWidget(),
+      bottomNavigationBar: FooterWidget(
+          currentPage: 'Accueil'), // Passer le nom de la page actuelle
       body: <Widget>[
         /// Home page
         Column(
