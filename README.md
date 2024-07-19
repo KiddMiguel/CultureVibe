@@ -30,7 +30,9 @@ CultureVibe est une application mobile qui permet aux utilisateurs de partager e
 - **Framework** : Node.js
 - **Bibliothèques** :
   - Express
-  - Sequelize pour la gestion de la base de données
+  - mariadb pour la gestion de la base de données
+  - cors
+  - body-paser
 
 ## Prérequis
 Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre machine :
@@ -43,7 +45,7 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 ### Backend
 1. Clonez le dépôt backend :
    ```bash
-   git clone <URL_DU_DÉPÔT_BACKEND>
+   git clone https://github.com/KiddMiguel/CultureVibe.git
    cd api
    ```
 
@@ -53,7 +55,14 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
    ```
 
 3. Configurez Sequelize et la base de données :
-   - Renommez le fichier `.env.example` en `.env` et renseignez vos informations de base de données.
+   - Fichier `.env` et renseignez vos informations de base de données.
+     ```bash
+        DB_HOST = 'localhost'
+        DB_USER = 'root'
+        DB_PWD = ''
+        DB_NAME = 'culturevibe'
+        DB_PORT = 3306
+     ```
 
 4. Lancez les migrations pour créer les tables :
    ```bash
