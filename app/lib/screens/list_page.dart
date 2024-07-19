@@ -18,7 +18,7 @@ class _ListPageState extends State<ListPage> {
   List<Map<String, dynamic>> _allLoisirs = [];
   List<String> _categories = [];
   bool _isLoading = true;
-  String _sortCriteria = 'titre'; // Initial sort criteria
+  String _sortCriteria = 'date'; // Initial sort criteria is now date
   String? _selectedCategory = 'Toutes les catégories';
 
   @override
@@ -45,8 +45,7 @@ class _ListPageState extends State<ListPage> {
                   'categorie': loisir['category_nom'],
                   'note': loisir['note'],
                   'moyen_note': loisir['moyen_note'],
-                  'date_publication': DateFormat('dd/MM/yyyy')
-                      .format(DateTime.parse(loisir['date_publication']))
+                  'date_publication': loisir['date_publication'] // Keep original format
                 })
             .toList();
         _sortLoisirs();
@@ -81,7 +80,8 @@ class _ListPageState extends State<ListPage> {
         _loisirs.sort((a, b) => a['titre'].compareTo(b['titre']));
       } else if (_sortCriteria == 'date') {
         _loisirs.sort(
-            (a, b) => b['date_publication'].compareTo(a['date_publication']));
+            (a, b) => DateTime.parse(b['date_publication'])
+                .compareTo(DateTime.parse(a['date_publication'])));
       }
 
       if (_selectedCategory != null &&
@@ -146,7 +146,14 @@ class _ListPageState extends State<ListPage> {
                         itemCount: _loisirs.length,
                         itemBuilder: (BuildContext context, int index) {
                           final loisir = _loisirs[index];
-                          return LoisirItem(loisir: loisir);
+                          // Format the date for display purposes
+                          final displayDate = DateFormat('dd/MM/yyyy').format(DateTime.parse(loisir['date_publication']));
+                          return LoisirItem(
+                            loisir: {
+                              ...loisir,
+                              'date_publication': displayDate, // Use formatted date for display
+                            },
+                          );
                         },
                       ),
               ),
